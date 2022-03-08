@@ -6,7 +6,7 @@ let next = document.querySelector("#next");
 let prev = document.querySelector("#prev");
 
 let tabletWidth = window.matchMedia("(max-width: 767px)");
-tabletWidth.addListener(slidesPosition);
+// tabletWidth.addListener(slidesPosition);
 slidesPosition(tabletWidth);
 
 
@@ -17,16 +17,19 @@ function slidesPosition(tabletWidth) {
     for (let i = 0; i < slides.length; i++) {
       slides[i].style.left = i * slideWidth + "px";
     }
-  } else {
-    for (let i = 0; i < slides.length; i++) {
-      slides[i].style.left = 0 + 'px';
-    }
-  }
+  } 
+  // else {
+  //   for (let i = 0; i < slides.length; i++) {
+  //     slides[i].style.left = 0 + 'px';
+  //   }
+  // }
 }
 slidesPosition(tabletWidth);
 
 //Подгонка ширины слайдера при изменении размеров экрана
-window.onresize = function () {
+window.onresize = toWindowWidth;
+
+function toWindowWidth() {
   let activeEl = document.querySelector(".active");
   let firstSlide = document.querySelector(".slide");
   activeEl.classList.toggle("active"); //убираем
@@ -35,7 +38,13 @@ window.onresize = function () {
   slidesPosition(tabletWidth);
 
   sliderScrollHeight();
+  
+  console.log(tabletWidth);
 };
+
+// window.addEventListener("orientationchange", function() {
+//   alert('Перевернул');
+// }, false);
 
 //Подгонка высоты слайдера для избежания вылезания контента за его пределы
 function sliderScrollHeight() {
@@ -83,3 +92,5 @@ next.onclick = function () {
 //TODO: несколько слайдеров на одной странице
 //TODO: попробовать сделать зацикливание
 //FIXME: при изменении экрана подгоняет слайдер используя transition
+//FIXME: едет высота и позиция слайдов при вращении телефона
+//FIXME: в ТЕЛЕФОНЕ почему-то смещение слайдов
