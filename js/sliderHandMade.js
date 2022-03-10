@@ -6,23 +6,17 @@ let next = document.querySelector("#next");
 let prev = document.querySelector("#prev");
 
 let tabletWidth = window.matchMedia("(max-width: 767px)");
-// tabletWidth.addListener(slidesPosition);
-slidesPosition(tabletWidth);
+let sizeFlag = 0;
 
 
 //Стартовое положение слайдов
 function slidesPosition(tabletWidth) {
+  let slideWidth = window.screen.width - 126; //126px это высчитанные стрелки и отступы
   if (tabletWidth.matches) {
-    let slideWidth = document.querySelector(".slide").offsetWidth;
     for (let i = 0; i < slides.length; i++) {
       slides[i].style.left = i * slideWidth + "px";
     }
-  } 
-  // else {
-  //   for (let i = 0; i < slides.length; i++) {
-  //     slides[i].style.left = 0 + 'px';
-  //   }
-  // }
+  }
 }
 slidesPosition(tabletWidth);
 
@@ -31,21 +25,20 @@ window.onresize = toWindowWidth;
 
 function toWindowWidth() {
   let activeEl = document.querySelector(".active");
-  let firstSlide = document.querySelector(".slide");
+  let firstSlide = slides[0];
   activeEl.classList.toggle("active"); //убираем
   firstSlide.classList.toggle("active"); //добавляем
 
   slidesPosition(tabletWidth);
 
   sliderScrollHeight();
-  
+
   console.log(tabletWidth);
 };
 
-// window.addEventListener("orientationchange", function() {
-//   alert('Перевернул');
-// }, false);
 
+
+//FIXME: подгонка высоты после смены ориентации телефона хромает
 //Подгонка высоты слайдера для избежания вылезания контента за его пределы
 function sliderScrollHeight() {
   if (tabletWidth.matches) {
@@ -57,7 +50,7 @@ function sliderScrollHeight() {
 sliderScrollHeight();
 
 //Переключение на предыдущий слайд
-prev.onclick = function () {
+function prevClick() {
   let slideWidth = document.querySelector(".slide").offsetWidth;
   let activeEl = document.querySelector(".active");
   if (activeEl.previousElementSibling) {
@@ -70,10 +63,11 @@ prev.onclick = function () {
     activeEl.previousElementSibling.classList.toggle("active"); //добавляем
   }
   sliderScrollHeight();
-};
+}
+prev.onclick = prevClick;
 
 //Переключение на следующий слайд
-next.onclick = function () {
+function nextClick() {
   let slideWidth = document.querySelector(".slide").offsetWidth;
   let activeEl = document.querySelector(".active");
   if (activeEl.nextElementSibling) {
@@ -86,7 +80,8 @@ next.onclick = function () {
     activeEl.nextElementSibling.classList.toggle("active"); //добавляем
   }
   sliderScrollHeight();
-};
+}
+next.onclick = nextClick;
 
 //TODO: сделать кнопки неактивными когда слайды заканчиваются
 //TODO: несколько слайдеров на одной странице
